@@ -44,7 +44,7 @@ Work in progress
 
 * [VSCode](https://code.visualstudio.com/) - Best text editor
 * [SublimeText](http://www.sublimetext.com/) - classical text editor
-* [Vim](https://github.com/vim/vim) - stubborn text editor
+* [Vim](https://github.com/vim/vim) - stubborn people text editor
 
 ## Authors
 
