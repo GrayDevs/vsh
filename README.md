@@ -28,10 +28,8 @@ sudo apt-get install netcat
 sudo apt-get install cryptcat
 ```
 ### Installing
-
-Copy the repository on your machine...
 ```
-git command ...
+git clone https://github.com/GrayDevs/vsh.git
 ```
 
 ## Demo
