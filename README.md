@@ -40,6 +40,15 @@ git command ...
 Work in progress
 ```
 
+### Common Error
+
+When running vsh, you may have this error :
+```
+'\r': command not found - .bashrc / .bash_profile
+```
+Indeed, if you modified the files on windows, the newline characters is by default set to \r\n which give you this error.
+To solve this issue, you juste need to set the newline sequence to LF (and not CRLF).
+
 ## Built With
 
 * [VSCode](https://code.visualstudio.com/) - Best text editor
