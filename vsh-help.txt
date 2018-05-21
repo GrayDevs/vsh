@@ -13,7 +13,6 @@ Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
     -c, --create directory nom_archive          generate an archive of the selected directory
     -d, --delete nom_archive                    delete the selected .arch file from the server
     -h, --help, -?                              give this help list
-    -v                                          verbose
     -w, --wipe                                  delete every archive from the server
 
 #Server Related Command:
