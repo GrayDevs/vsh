@@ -1,0 +1,23 @@
+#VSH SERVER HELP
+#Version: 0.0
+
+Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
+
+#Basic mode:
+    -b, --browse @server port nom_archive       allow you to explore the selected archive
+    -e, --extract @server port nom_archive      extract the content of an archive
+    -l, --list @server port                     give the list of the archive on the server
+
+#Added mode:
+    -a, --add nom_archive                       add the selected .arch file to the server
+    -c, --create directory nom_archive          generate an archive of the selected directory
+    -d, --delete nom_archive                    delete the selected .arch file from the server
+    -h, --help, -?                              give this help list
+    -v                                          verbose
+    -w, --wipe                                  delete every archive from the server
+
+#Server Related Command:
+    --start type @server port                   launch a netcat(nc) or cryptcat(cc)-based 
+                                                server on the selected port
+    --stop @server port                         stop the running server (kill the process)
+    -i, --init                                  initialize the server with a test archive

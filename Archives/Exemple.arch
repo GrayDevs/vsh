@@ -1,0 +1,63 @@
+3:28
+
+directory Exemple
+Test drwxrwxrwx 0
+@
+directory Exemple/Test
+A drwxrwxrwx 0
+B drwxrwxrwx 0
+toto1.txt -rwxrwxrwx 0 1 4
+toto2.txt -rwxrwxrwx 0 5 2
+@
+directory Exemple/Test/A
+A1 drwxrwxrwx 0
+A2 drwxrwxrwx 0
+A3 drwxrwxrwx 0
+toto3.txt -rwxrwxrwx 0 7 5
+@
+directory Exemple/Test/A/A1
+toto4.txt -rwxrwxrwx 0 12 5
+@
+directory Exemple/Test/A/A2
+@
+directory Exemple/Test/A/A3
+@
+directory Exemple/Test/B
+bar.txt -rwxrwxrwx 0 17 19
+@
+azertyuiop^mlkjhgfdsqwxcvbn,;
+
+azertyefzf
+reg
+qrengSuis-je une gentille baleine
+qui se balade
+dans la mer ?azdazdazdazd
+azdazdazdazdazd
+azdazdazdazdada
+
+
+adazda
+azdaa
+
+zaduihaefh
+zefki
+secho "bonjour!"
+NAME
+	ls - list directory contents
+
+SYNOPSIS
+	ls [OPTION]... [FILE]...
+
+DESCRIPTION
+	List information about the FILEs.
+DESCRIPTION
+	man formats and displays the on-line manual pages.
+NAME
+	cat - concatenate files and print on the standard output
+
+SYNOPSIS
+	cat [OPTION] [FILE]...
+
+DESCRIPTION
+	Concatenate FILE(s), or standard input, to standard out-
+	put.
