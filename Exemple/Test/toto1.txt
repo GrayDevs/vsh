@@ -1,5 +1,10 @@
-azertyuiop^mlkjhgfdsqwxcvbn,;
-
-azertyefzf
-reg
-qreng
+#toto1.txt
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nullam et vestibulum dolor.
+Sed posuere est vitae tellus egestas, at pharetra libero porta.
+Vivamus a neque pharetra, consequat velit vitae, euismod sem.
+Nullam turpis mauris, molestie eu pellentesque feugiat, semper nec erat.
+Vivamus tincidunt bibendum elit, at iaculis quam. 
+Praesent et sagittis nunc. 
+Duis id consequat urna. 
+Nunc mollis enim sit amet tellus tempus, quis rhoncus libero ornare.

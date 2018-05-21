@@ -1,3 +1,8 @@
-Suis-je une gentille baleine
-qui se balade
-dans la mer ?
+#toto2.txt
+Aenean luctus arcu nec consequat aliquet.
+Praesent enim neque, posuere id ligula in, volutpat laoreet quam.
+Ut malesuada efficitur interdum. 
+Fusce vulputate consequat finibus.
+Etiam vitae venenatis lacus.
+Cras porttitor nibh at tellus maximus, et dictum arcu interdum.
+Suspendisse vel imperdiet tellus. 
