@@ -1,5 +1,5 @@
 # VSH Server (BASH)
-
+=====
 This project aims to create an archive server.
 
 It allows you to launch and query the archive server via a
@@ -14,13 +14,9 @@ An archive consists of two parts:
 (@see test archive)
 
 ## Getting started
-
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
-
-What things you need to install the software and how to install them ?
-
 For debian-based OS or Windows 10 WSL
 (@see https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 ```
