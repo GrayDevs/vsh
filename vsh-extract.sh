@@ -22,20 +22,19 @@ LOG="vsh.log"
 
 #### FONCTION
 
-function nettoyage() { rm /tmp/.body /tmp/.header ; }
+function nettoyage() { rm /tmp/.header /tmp/.body ; }
 
 # La fonction set_permission permet de modifier les permissions d'un fichier
 # $1    chemin_fichier
 # $2    permissions
 function set_permission(){
-    echo $1, $2
     local permissions=$2 #on doit set une variable locale pour pouvoir effectuer la substitution 
     chmod u=${permissions:1:3} $1
     chmod g=${permissions:4:3} $1
     chmod o=${permissions:7:3} $1
 }
 
-# La fonction get_content
+# La fonction get_content récupère le contenu d'un fichier
 # $1    file_name               Non-used
 # $2    permission              Non-used
 # $3    weigth                  Non-used
@@ -45,7 +44,7 @@ function get_content() {
     local first_line=$4
     local size=$(($4 + $5 - 1))
     if [ $5 -gt 0 ]; then
-        sed -n "$4,$size p" /tmp/.header >> $path$1
+        sed -n "$4,$size p" /tmp/.body >> $path$1
     fi
 }
 
@@ -59,14 +58,14 @@ if [ ! -e "$ARCHIVE" ]; then
 fi
 
 # Quelques variable pour pouvoir séparer les 2 parties
-ligne1=$(head -1 $ARCHIVE)
-debut_body=${ligne1%:*}
-debut_header=${ligne1#*:}
-fin_body=$(($debut_header - 1))
+ligne1=$(head -1 $ARCHIVE) #3:25
+debut_header=${ligne1%:*} #3
+debut_body=${ligne1#*:} #25
+fin_header=$(($debut_body - 1)) #24
 
 # Création de fichiers temporaires contenant chacun leur partie respective
-sed -n "$debut_body,$fin_body p" $ARCHIVE >> /tmp/.body
-sed -n "$debut_header,$ p" $ARCHIVE >> /tmp/.header
+sed -n "$debut_header,$fin_header p" $ARCHIVE > /tmp/.header
+sed -n "$debut_body,$ p" $ARCHIVE > /tmp/.body
 
 trap nettoyage EXIT #on prépare le nettoyage en cas d'erreur
 
@@ -98,11 +97,10 @@ while read line; do
             printf "touch: created/updated file '$file_name'\n"  >> $LOG
             get_content $(echo $line) #Récupération du contenu
         fi
-        echo $file_path $permissions
         set_permission $file_path $permissions #ajout des permissions
     fi
     printf "#"
-done <<< $(cat /tmp/.body | grep '[^@]')
+done <<< $(cat /tmp/.header | grep '[^@]')
 
 printf "\rvsh (extract): Structure tree successfully generated\n"
 printf "Operation successfull\n" >> $LOG
