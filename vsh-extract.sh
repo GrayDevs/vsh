@@ -101,7 +101,7 @@ while read line; do
         echo $file_path $permissions
         set_permission $file_path $permissions #ajout des permissions
     fi
-    #printf "#"
+    printf "#"
 done <<< $(cat /tmp/.body | grep '[^@]')
 
 printf "\rvsh (extract): Structure tree successfully generated\n"
