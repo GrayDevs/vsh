@@ -38,7 +38,7 @@ function interaction() {
     local cmd args #déclaration de variables locales
 
     echo "############################################ VSH SERVER ############################################"
-    echo "Bienvenue sur le serveur d'archive vsh"
+    echo "# Bienvenue sur le serveur d'archive vsh"
     echo "> --help #to get the command list"
     while true; do #boucle infinie
         echo -n "> "
@@ -84,7 +84,7 @@ function commande-extract() {
 # Autres fonctions
 function commande-non-comprise() {
    echo "Le serveur ne peut pas interpréter cette commande"
-   echo "Type help to print the different command"
+   echo "Try 'vsh --help' for more information."
 }
 
 function commande-help() {

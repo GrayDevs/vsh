@@ -10,7 +10,6 @@ Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
 
 #Added mode:
     -a, --add nom_archive                       add the selected .arch file to the server
-    -c, --create directory nom_archive          generate an archive of the selected directory
     -d, --delete nom_archive                    delete the selected .arch file from the server
     -h, --help, -?                              give this help list
     -w, --wipe                                  delete every archive from the server

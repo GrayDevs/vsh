@@ -47,7 +47,9 @@ function recursive() {
 	echo "directory $1" | sed -e "s/$sedProof//" >> /tmp/.header
 	dirs=''
 	for file in $(ls -a -I . -I .. $1); do
-		echo -n $file $(ls -dl $1/$file | awk '{print $1}') $(du -s $1/$file | awk '{print $1}') >> /tmp/.header
+		#ls -ld donne des informations sur le dossier lui meme
+		#du -b, disk usage of the set of FILEs, recursively, in byte
+		echo -n $file $(ls -dl $1/$file | awk '{print $1}') $(du -bs $1/$file | awk '{print $1}') >> /tmp/.header
 		if [ -d $1/$file ]; then
 			dirs="$dirs $file"
 			echo >> /tmp/.header
@@ -62,6 +64,11 @@ function recursive() {
 	for file in $dirs; do
 		recursive $(echo $1/$file $count | sed 's/\/\//\//g') $3
 	done
+}
+
+#suppression des fichiers temporaires
+function nettoyage() {
+	rm /tmp/.body /tmp/.header
 }
 
 #### PROCESS
@@ -104,7 +111,7 @@ echo -e "3:$(($(wc -l /tmp/.header | awk '{print $1}')+3))\n" > $outFile.arch
 cat /tmp/.header >> $outFile.arch 
 cat /tmp/.body >> $outFile.arch
 
-rm /tmp/.body /tmp/.header #suppression des fichiers temporaires
+trap nettoyage EXIT
 echo "log - archive $outFile.arch successfully generated"
 
 #Check process
