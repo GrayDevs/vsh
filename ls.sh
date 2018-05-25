@@ -2,7 +2,7 @@
 
 archive=$1
 repertoire=$(echo $2 | sed 's/\/$//g')
-grep '^directory' ./Archive/test.arch | sed 's/directory //g'
+grep '^directory' ./Archive/test.arch | sed 's/directory //g' > rep.txt
 ligne=$(grep -n '^directory '$repertoire'' $archive | head -1 | cut -d: -f1)
 #echo $ligne
 
