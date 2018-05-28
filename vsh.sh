@@ -9,7 +9,9 @@
 # Source file (source: executes the content of the file passed as argument)
 source vsh-controlleur.sh
 
-set -e
+set -euo pipefail
+#set -x for verbose/debugging purpose
+#@see  https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 
 #### PROCESS
 
@@ -23,21 +25,32 @@ fi
 check_args "$@"
 
 #Lance les commandes
+# $1    COMMANDE
+# $2    ADRESSE_SERVEUR
+# $3    PORT
+# $4    NOM_ARCHIVE
 case $1 in
-    "-b" | "--browse")
-        echo "browse @server port nom_archive"
-        #...
+    "-a" | "--add")
+        #add @server port nom_archive
+        nc $2 $3 <<< "add"
         ;;
-    "-e" | "--extract")
-        echo "extract @server port nom_archive"
-        #...
+    "-b" | "--browse")
+        #browse @server port nom_archive
+        nc $2 $3 <<< "browse $4"
+        ;;
+    "-d" | "--delete")
+        #delete @server port nom_archive
+        nc $2 $3 <<< "delete $4"
+        ;;
+    "--extract")
+        #extract @server port nom_archive
+        nc $2 $3 <<< "extract $4" 
         ;;
     "-l" | "--list")
-        echo "list @server port"
-        #...
+        nc $2 $3 <<< "list"
         ;;
     *)
-        echo "Incorrect option (--help)"
+        printf "Incorrect option (--help)\n"
         exit 1
         ;;
 esac

@@ -58,6 +58,7 @@ function recursive() {
 			echo " $count $fileLength" >> /tmp/.header
 			count=$(($count+$fileLength))
 			cat $1/$file >> /tmp/.body
+			printf "\n" >> /tmp/.body
 		fi
 	done
 	echo @ >> /tmp/.header

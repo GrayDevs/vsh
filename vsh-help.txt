@@ -5,7 +5,7 @@ Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
 
 #Basic mode:
     -b, --browse @server port nom_archive       allow you to explore the selected archive
-    -e, --extract @server port nom_archive      extract the content of an archive
+    --extract @server port nom_archive          extract the content of an archive
     -l, --list @server port                     give the list of the archive on the server
 
 #Added mode:

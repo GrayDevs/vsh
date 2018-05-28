@@ -12,11 +12,15 @@ if [ $# -ne 1 ]; then
     exit -1
 fi
 
-# Variables Globales
+# Constante
 PORT="$1"
 ARCHIVE="./Archives/"
+RED='\033[1;31m'
+YELLOW='\033[0;36m'
+GREY='\033[1;30m'
+NC='\033[0m' # No Color
 
-####FONCTIONS
+#### FONCTIONS
 
 # La fonction nettoyage détruit le tube $FIFO
 function nettoyage() { rm -f "$FIFO"; }
@@ -26,8 +30,8 @@ function nettoyage() { rm -f "$FIFO"; }
 # interaction ci-dessous
 function accept-loop() {
     while true; do #boucle infinie
-            echo "log - server online"
-    	    interaction < "$FIFO" | netcat -l -p  "$PORT" > "$FIFO" #listen, keep and port
+            printf "log - Connexion aux serveur\n"
+    	    interaction < "$FIFO" | netcat -q 5 -l -p  "$PORT" > "$FIFO" #listen, keep and port
     done
 }
 
@@ -37,11 +41,7 @@ function interaction() {
 
     local cmd args #déclaration de variables locales
 
-    echo "############################################ VSH SERVER ############################################"
-    echo "# Bienvenue sur le serveur d'archive vsh"
-    echo "> --help #to get the command list"
     while true; do #boucle infinie
-        echo -n "> "
 	    read cmd args || exit -1 #demande à l'utilisateur de saisir les valeurs pour cmd et args
 	    funct="commande-$cmd"
 	    if [ "$(type -t $funct)" = "function" ]; then #si la funct existe et est une fonction
@@ -58,43 +58,54 @@ function interaction() {
 
 #
 function commande-browse() {
-    #...
     echo "browse"
+    exit
 }
 
 #
 function commande-list() {
-    echo "#Liste des archives présentes sur le serveur :"
+    printf "${GREY}#Liste des archives présentes sur le serveur :${NC}\n"
     if [ "ls $ARCHIVE" == "" ]; then
         echo "Il n'y a pas d'archive sur le serveur"
         echo "--add nom_archive pour en ajouter une"
         echo "--init pour ajouter une archive de test généré automatiquement"
     else
-        echo -e "Nom_archive\tModifié_le\tTaille"
+        printf "${YELLOW}Nom_archive\tModifié_le\tTaille${NC}\n"
         ls -l $ARCHIVE | grep '.arch$' | awk '{print $9 "\t" $6"-"$7"-"$8 "\t" $5}' # | sort -df
         #stat --printf="%n\t%y\t%s\n" $ARCHIVE | sort -t $'\t' -k 2
     fi
+    exit
 }
 
+#
 function commande-extract() {
-    #...
-    echo "extract"
+    echo "Vous souhaitez extraire l'archive $args" #existance de l'archive à vérifier
+    ./vsh-extract.sh $args
+    exit
 }
 
 # Autres fonctions
+function commande-add() {
+    printf "Ajout de l'archive $args au serveur\n"
+    exit
+}
+
+function commande-delete() {
+    printf "Vous souhaitez supprimer l'archive $args\n" #existance de l'archive à vérifier
+    printf "${RED}ATTENTION${NC}: Cette action est irréversible\n"
+    #rm -f $args
+    exit
+}
+
+function commande-init() {
+    printf "Initialisation du serveur avec une archive test"
+    exit
+}
+
 function commande-non-comprise() {
    echo "Le serveur ne peut pas interpréter cette commande"
    echo "Try 'vsh --help' for more information."
-}
-
-function commande-help() {
-    cat vsh-help.txt; echo ""
-}
-
-function commande-exit() {
-    #kill -9 process PID
-    echo "disconnection..."
-    #kill -TSTP or kill -CONT
+   exit
 }
 
 #### PROCESS
