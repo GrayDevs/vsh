@@ -7,13 +7,13 @@ courant=$(cat rep.txt | head -1 | sed 's/\/$//g')
 
 contenu=""
 
+#on créer une fonction qui va venir supprimer nos fichiers temporaires 
 function nettoyage (){ 
 	rm /tmp/.header 
 	rm /tmp/.body
 }
 
-#séparation des 2 parties
-
+#séparation des 2 parties, body et header
 ligne1=$(head -1 $archive)
 debut_header=${ligne1%:*}
 debut_body=${ligne1#*:}
@@ -25,9 +25,10 @@ sed -n "$debut_body,$ p" $archive >> /tmp/.body
 
 trap nettoyage EXIT #on prepare le nettoyage en cas d'erreur
 
-
+#on créer une fonction qui va venir lister le contenu d'un répertoire (fonction tirer de la commande ls)
 function listefich (){
-	touch test.txt
+	rm contenu.txt
+	touch contenu.txt
 	ligne=$(grep -n '^directory '$courant'' $archive | head -1 | cut -d: -f1)
 	lignedel=$(grep -n '^@$' $archive | cut -d: -f1)
 	lignedel=$(echo $lignedel | sed 's/ /:/g')
@@ -35,7 +36,7 @@ function listefich (){
 	n=$(grep -n '^'$courant'' rep.txt | head -1 | cut -d: -f1)
 	fin=$(echo $lignedel | cut -d: -f$n)
 	nbligne=$(($fin-$ligne-1))
-	echo $(cat $archive | head -$((fin-1)) | tail -$((nbligne))) > test.txt
+	echo $(cat $archive | head -$((fin-1)) | tail -$((nbligne)) | awk '{print $0}' ) > contenu.txt
 	
 	
 }
@@ -43,7 +44,7 @@ function listefich (){
 
 listefich $archive $courant 
 flag=0
-for word in $(cat test.txt)
+for word in $(cat contenu.txt)
 do
 	
 	if [ "$word" = "$fichier" ]; then 
