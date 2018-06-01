@@ -41,9 +41,10 @@ function listefich (){
 	
 }
 
-
+#on liste les fichier du repertoire
 listefich $archive $courant 
 flag=0
+#on test si le fichier à afficher est dans le répertoire courant 
 for word in $(cat contenu.txt)
 do
 	
@@ -52,13 +53,19 @@ do
 		flag=1
 	fi
 done
-
+#si le fichier est dans le répertoire alors
 if [ $flag -eq 1 ]; then
+	#on récupère la ligne du correspondant au fichier dans le header de l'archive
 	lignefichier=$(grep '^'$fichier'' $archive)
+	#on récupère le numéro de ligne du début de fichier (dans le body)
 	debut=$(echo $lignefichier | awk '{print $4}')
+	#on récupère le nombre de lignes que contient le fichier
 	finfich=$(echo $lignefichier | awk '{print $5}')
+	#on calcul le numéro de ligne de fin du fichier (dans le body)
 	finfich=$(($debut+$finfich-1))
+	#on affiche les lignes correspondantes
 	sed -n "$debut,$finfich p" /tmp/.body
+#Si le fichier n'existe pas alors	
 else
 	echo "le fichier n'existe pas dans ce dossier"
 fi
