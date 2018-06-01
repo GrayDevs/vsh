@@ -12,22 +12,24 @@ if [ $# -ne 1 ]; then
 fi
 
 # Variable(s)
-ARCHIVE="Archives/$1"
-
+export ARCHIVE="Archives/$1"
+export CURRENT=$(sed -n '3p' Archives/test.arch | awk '{print $2}')
+echo $CURRENT
 #### FONCTION
 
 # La fonction control effectue les vérifications sur les parametres
-# $1    ligne contenant les commandes rentrée par l'utilisateur
-function control() { 
+# $1    commande
+# $2    argument
+function control() {
     # stockage du nombre d'argument
-    local nb_arg=$(echo $1 | wc -w)
-    arg_1=$(echo $line | awk '{print $1}')
+    local nb_arg=$#
+    cmd=$(echo $1 | awk '{print $1}')
     if [ $nb_arg -gt 2 ]; then
-        arg_1="erreur"
-    elif [ $nb_arg -ne 1 ] && ([ "$arg_1" == "pwd" ] || [ "$arg_1" == "ls" ] || [ "$arg_1" == "help" ] || [ "$arg_1" == "exit" ]); then
-        arg_1="erreur"    
-    elif [ $nb_arg -ne 2 ] && ([ "$arg_1" == "cat" ] || [ "$arg_1" == "cd" ] || [ "$arg_1" == "rm" ]); then
-        arg_1="erreur"    
+        cmd="erreur"
+    elif [ $nb_arg -ne 1 ] && ([ "$cmd" == "pwd" ] || [ "$cmd" == "help" ] || [ "$cmd" == "exit" ]); then
+        cmd="erreur"    
+    elif [ $nb_arg -ne 2 ] && ([ "$cmd" == "cat" ] || [ "$cmd" == "cd" ] || [ "$cmd" == "rm" ]); then
+        cmd="erreur"
     fi
 }
 
@@ -35,39 +37,47 @@ function control() {
 is_running="TRUE"
 
 while [ "$is_running" == "TRUE" ]; do
-    printf "vsh:> "
-    read line
-
+    printf "vsh:/> "
+    read cmd arg
     # si l'utilisateur à simplement appuyé sur "entrez"
-    if [ "$line" == "" ]; then
-        arg_1="erreur"
+    if [ "$cmd" == "" ]; then
+        cmd="erreur"
     else
         #Controle des paramètres
-        control $line
+        control $cmd $arg
+
+        echo "###########TEST#########"
+        echo "commande : "$cmd #Test
+        echo "argument : "$arg #Test
+        echo "########################"
+        
         #Lancement des commandes
-        case "$arg_1" in
+        case "$cmd" in
             "pwd")
                 echo "pwd"
                 #Lancer vsh-pwd.sh
                 ;;
             "ls")
-                echo "ls $2"
                 #Lancer vsh-pwd.sh
+                if [ $# -eq 1 ]; then
+                    arg=$CURRENT
+                fi
+                ./ls.sh $arg
                 ;;
             "cat")
                 echo "cat "
                 #...
                 ;;
             "cd")
-                echo "cd $2"
+                echo "cd"
                 #...
                 ;;
             "rm")
-                echo "rm $2"
+                echo "rm"
                 #...
                 ;; 
             "help")
-                printf "Commandes possibles : pwd ; ls ; cd <directory> ;\n cat <file_name> ; rm <file_name> ; exit\n"
+                printf "Commandes possibles : pwd ; ls <directory> ; cd <directory> ;\n cat <file_name> ; rm <file_name> ; exit\n"
                 ;;
             "exit")
                 is_running="FALSE"
@@ -79,5 +89,3 @@ while [ "$is_running" == "TRUE" ]; do
 done
 
 exit 0
-
-
