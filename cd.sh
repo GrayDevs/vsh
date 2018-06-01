@@ -6,8 +6,9 @@ cible=$1
 archive="./Archive/test.arch"
 
 function listefich() 
-{
-	touch test.txt
+{	
+	contenu
+	touch contenu.txt
 	ligne=$(grep -n '^drirectory '$courant'' $archive | head -1 | cut -d: -f1)
 	lignedel=$(grep -n '^@$' $archive | cut -d: -f1)
 	lignedel=$(echo $lignedel | sed 's/ /:/g')
@@ -15,7 +16,7 @@ function listefich()
 	n=$(grep -n '^'$courant'$' rep.txt | head -1 | cut -d: -f1)
 	fin=$(echo $lignedel | cut -d: -f1)
 	nbligne=$(($fin-$ligne-1))
-	echo $(cat $1 | head -$((fin-1)) | tail -$((nbligne))) > test.txt
+	echo $(cat $1 | head -$((fin-1)) | tail -$((nbligne)) | awk '{print $0}') > contenu.txt
 
 }
 
@@ -35,7 +36,7 @@ fi
 
 if [ $flag -eq 0 ];then
 	listefich $archive $courant 
-	for word in $(cat test.txt);do
+	for word in $(cat contenu.txt);do
 		if [ "$word" = "$cible" ];then
 			while read ligne
 			do
