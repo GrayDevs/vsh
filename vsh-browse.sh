@@ -14,7 +14,7 @@ fi
 # Variable(s)
 export ARCHIVE="Archives/$1"
 export CURRENT=$(sed -n '3p' Archives/test.arch | awk '{print $2}')
-echo $CURRENT
+
 #### FONCTION
 
 # La fonction control effectue les vérifications sur les parametres
