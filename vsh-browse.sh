@@ -7,13 +7,13 @@ set -euo pipefail
 
 # Vérification nombre de paramètres
 if [ $# -ne 1 ]; then
-    echo "Usage: '$0 <nom_archive.arch>'"
+    echo "Usage: '$0 --browse <@SERVEUR> <PORT> <nom_archive.arch>'"
     exit 1
 fi
 
 # Variable(s)
 export ARCHIVE="Archives/$1"
-export CURRENT=$(sed -n '3p' Archives/test.arch | awk '{print $2}')
+export CURRENT=$(sed -n '3p' $ARCHIVE | awk '{print $2}' | sed 's/\/$//g')
 
 #### FONCTION
 
@@ -45,36 +45,26 @@ while [ "$is_running" == "TRUE" ]; do
     else
         #Controle des paramètres
         control $cmd $arg
-
-        echo "###########TEST#########"
-        echo "commande : "$cmd #Test
-        echo "argument : "$arg #Test
-        echo "########################"
         
         #Lancement des commandes
         case "$cmd" in
             "pwd")
-                echo "pwd"
-                #Lancer vsh-pwd.sh
+                printf "$CURRENT\n"
                 ;;
             "ls")
-                #Lancer vsh-pwd.sh
-                if [ $# -eq 1 ]; then
-                    arg=$CURRENT
-                fi
                 ./ls.sh $arg
                 ;;
             "cat")
                 echo "cat "
-                #...
+                ./cat.sh $arg
                 ;;
             "cd")
-                echo "cd"
-                #...
+                echo 
+                ./cd.sh $arg
                 ;;
             "rm")
                 echo "rm"
-                #...
+                ./rm.sh
                 ;; 
             "help")
                 printf "Commandes possibles : pwd ; ls <directory> ; cd <directory> ;\n cat <file_name> ; rm <file_name> ; exit\n"
