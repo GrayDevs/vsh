@@ -1,41 +1,39 @@
 #!/bin/bash
 
-archive="./Archive/test.arch"
-#repertoire=$(echo $1 | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
-#fichier=$(echo $1 | sed 's/\(.*\)\/\([A-Z a-z 0-9]*\)$/\2/g')
-courant=$(cat rep.txt | head -1 | sed 's/\/$//g')
+# Description : supprime le fichier / le répertoire voulu
+# Ce script utilise les fichiers suivants :
+# /tmp/rep.txt
+# /tmp/test.txt
+
+set -euo pipefail
+
+# Variable(s)
 cible=$1
 
-
 #séparation des parties
-
-ligne1=$(head -1 $archive)
+ligne1=$(head -1 $ARCHIVE)
 debut_header=${ligne1%:*}
 debut_body=${ligne1#*:}
 fin_header=$(($debut_body-1))
 
 function listefich (){
-	
 	archivef=$1
 	courantf=$2
 	
-	rm test.txt
-	touch test.txt
+	touch /tmp/test.txt
 	
 	ligne=$(grep -n '^directory '$courantf'' $archivef | head -1 | cut -d: -f1)
 	
 	lignedel=$(grep -n '^@$' $archivef | cut -d: -f1)
 	lignedel=$(echo $lignedel | sed 's/ /:/g')
 	
-	n=$(grep -n '^'$courantf'' rep.txt | head -1 | cut -d: -f1)
+	n=$(grep -n '^'$courantf'' /tmp/rep.txt | head -1 | cut -d: -f1)
 	
 	fin=$(echo $lignedel | cut -d: -f$n)
 	
 	nbligne=$(($fin-$ligne-1))
 	
-	echo $(cat $archivef | head -$((fin-1)) | tail -$((nbligne)) | awk '{print $1}') >test.txt
-	
-	
+	echo $(cat $archivef | head -$((fin-1)) | tail -$((nbligne)) | awk '{print $1}') > /tmp/test.txt
 }
 
 function supligne() {
@@ -77,13 +75,13 @@ function suprep() {
 	
 	listefich $archiverep $suprepertoire
 	flagsup=0	
-	if [ -s $(cat test.txt) ];then	
+	if [ -s $(cat /tmp/test.txt) ];then	
 		echo "le repertoire est vide"
 		sed 's/^directory '$suprepertoire2'$//g' $archiverep > archive.arch
 		cp archive.arch ./Archive/test.arch
 	else
 
-		for word in $(cat test.txt)
+		for word in $(cat /tmp/test.txt)
 		do
 			supr="$suprepertoire/$word"
 			supr2=$(echo $supr | sed 's/\//\\\//g')
@@ -93,7 +91,7 @@ function suprep() {
 					flagsup=1 		
 				fi
 
-			done < rep.txt
+			done < /tmp/rep.txt
 
 			if [ $flagsup -eq 1 ];then
 				suprep $archiverep $supr
@@ -118,17 +116,17 @@ do
 	if [ "$ligne" = "$cible" ];then
 		flag=1	
 	fi
-done < rep.txt
+done < /tmp/rep.txt
 
 #si c'est un fichier
 if [ $flag -eq 0 ]; then
 	#on sépare le fichier cible et son répertoire (s'il n'y a que le fichier de préciser, $repertoire=$fichier
 	repertoire=$(echo $1 | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
 	fichier=$(echo $1 | sed 's/\(.*\)\/\([A-Z a-z 0-9]*\)$/\2/g')
-	listefich $archive $courant 
+	listefich $ARCHIVE $CURRENT 
 	flag2=0
 	#on test si le fichier est dans le répertoire courant
-	for word in $(cat test.txt);do
+	for word in $(cat /tmp/test.txt);do
 	
 		if [ "$word" = "$fichier" ];then 
 			flag2=1
@@ -137,7 +135,7 @@ if [ $flag -eq 0 ]; then
 	#on supprime le fichier 
 	if [ $flag2 -eq 1 ]; then
 		echo "le fichier est dans le répertoire courant"
-		supligne $archive $fichier
+		supligne $ARCHIVE $fichier
 
 	fi
 	#sinon on va tester si le répertoire est connu dans l'arboressence
@@ -147,13 +145,13 @@ if [ $flag -eq 0 ]; then
 			if [ "$ligne" = "$repertoire" ]; then
 				flag2=1
 			fi
-		done < rep.txt
+		done < /tmp/rep.txt
 		#s'il est connu on va supprimer le fichier sinon on affiche un message d'erreur
 		if [ $flag2 -eq 1 ]; then
-			couranttest=$courant
-			courant=$repertoire
-			supligne $archive $fichier
-			courant=$couranttest
+			couranttest=$CURRENT
+			CURRENT=$repertoire
+			supligne $ARCHIVE $fichier
+			CURRENT=$couranttest
 		else
 			echo "le fichier n'existe pas"
 		fi
@@ -163,5 +161,5 @@ fi
 
 #si le fichier cible est un répertoire
 if [ $flag -eq 1 ];then
-	suprep $archive $cible
+	suprep $ARCHIVE $cible
 fi
