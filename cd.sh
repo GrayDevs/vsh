@@ -3,7 +3,11 @@
 courant="Exemple/Test/A"
 ARCHIVE="./Archive/test2.arch"
 
-grep '^directory' $ARCHIVE | awk '{print $2}' > rep.txt
+
+# On récupère une liste des répertoire de l'archive qui nous sera utile pour les autres commandes
+grep '^directory' $ARCHIVE | sed 's/directory //g' > rep.txt
+touch liste.txt
+#grep '^directory' $ARCHIVE | awk '{print $2}' > rep.txt
 
 function listefich() 
 {
