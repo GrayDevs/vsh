@@ -38,7 +38,7 @@ function control() {
 is_running="TRUE"
 
 while [ "$is_running" == "TRUE" ]; do
-    printf "vsh:/> "
+    printf "vsh:$CURRENT/> "
     read cmd arg
     # si l'utilisateur à simplement appuyé sur "entrez"
     if [ "$cmd" == "" ]; then
