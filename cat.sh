@@ -52,8 +52,6 @@ function listefich (){
 	fin=$(echo $lignedel | cut -d: -f$n)
 	nbligne=$(($fin-$ligne-1))
 	echo $(cat $ARCHIVE | head -$((fin-1)) | tail -$((nbligne))) > /tmp/test.txt
-	
-	
 }
 
 
@@ -97,7 +95,6 @@ if [ $flag -eq 0 ]; then
 		testrep=$(echo $lignefichier | awk '{print $2}' | cut -c1)
 		if [ "$testrep" = "d" ];then
 			echo "la cible est un répertoire"
-			exit 1
 		else
 			debut=$(echo $lignefichier | awk '{print $4}')
 			finfich=$(echo $lignefichier | awk '{print $5}')

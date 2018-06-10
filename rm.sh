@@ -9,6 +9,7 @@ set -euo pipefail
 
 # Variable(s)
 cible=$1
+echo $cible
 
 #séparation des parties
 ligne1=$(head -1 $ARCHIVE)
@@ -51,8 +52,8 @@ function supligne() {
 	#on recupère le nombre de lignes qui correspondent au fichier
 	finfich=$(echo $lignefichier | awk '{print $5}')
 	if [ $finfich -eq 0 ];then
-		sed ''$nb's/.*//g' $archivetest > archive.arch
-		cp archive.arch ./Archive/test.arch
+		sed ''$nb's/.*//g' $archivetest > tmp.arch
+		cp tmp.arch ./Archives/test.arch
 	else
 		
 		finfich=$(($debutfich+finfich-1))
@@ -60,8 +61,8 @@ function supligne() {
 		finrm=$((fin_header+finfich))
 		
 		#on remplace les ligne par des lignes vide
-		sed -e ''$debutrm','$finrm's/.*//g' -e ''$nb's/.*//g' $archivetest > archive.arch
-		cp archive.arch ./Archive/test.arch
+		sed -e ''$debutrm','$finrm's/.*//g' -e ''$nb's/.*//g' $archivetest > tmp.arch
+		cp tmp.arch ./Archives/test.arch
 	fi
 }
 
@@ -77,8 +78,8 @@ function suprep() {
 	flagsup=0	
 	if [ -s $(cat /tmp/test.txt) ];then	
 		echo "le repertoire est vide"
-		sed 's/^directory '$suprepertoire2'$//g' $archiverep > archive.arch
-		cp archive.arch ./Archive/test.arch
+		sed 's/^directory '$suprepertoire2'$//g' $archiverep > tmp.arch
+		cp tmp.arch ./Archives/test.arch
 	else
 
 		for word in $(cat /tmp/test.txt)
@@ -95,14 +96,14 @@ function suprep() {
 
 			if [ $flagsup -eq 1 ];then
 				suprep $archiverep $supr
-				sed -e 's/^directory '$supr2'$//g' > archive.arch
-				cp archive .arch ./Archive/test.arch				
+				sed -e 's/^directory '$supr2'$//g' > tmp.arch
+				cp archive .arch ./Archives/test.arch				
 			else
 				supligne $archiverep $word
 			fi
 		done
-		sed -e 's/^directory '$suprepertoire2'$//g' -e ''$nbr's/.*//g' $archiverep > archive.arch
-		cp archive.arch ./Archive/test.arch
+		sed -e 's/^directory '$suprepertoire2'$//g' -e ''$nbr's/.*//g' $archiverep > tmp.arch
+		cp tmp.arch ./Archives/test.arch
 
 
 	fi

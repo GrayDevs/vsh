@@ -4,18 +4,14 @@
 Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
 
 #Basic mode:
-    -b, --browse @server port nom_archive       allow you to explore the selected archive
-    --extract @server port nom_archive          extract the content of an archive
-    -l, --list @server port                     give the list of the archive on the server
+    -b, --browse @server port arch_name       allow you to explore the selected archive
+    --extract @server port arch_name          extract the content of an archive
+    -l, --list @server port                   give the list of the archive on the server
 
 #Added mode:
-    -a, --add nom_archive                       add the selected .arch file to the server
-    -d, --delete nom_archive                    delete the selected .arch file from the server
-    -h, --help, -?                              give this help list
-    -w, --wipe                                  delete every archive from the server
-
-#Server Related Command:
-    --start type @server port                   launch a netcat(nc) or cryptcat(cc)-based 
-                                                server on the selected port
-    --stop @server port                         stop the running server (kill the process)
-    -i, --init                                  initialize the server with a test archive
+    -a, --add arch_name                       add the selected .arch file to the server
+    -d, --delete arch_name                    delete the selected .arch file from the server
+    -g, --generate directory                  generate an arch. of the selected directory
+    -h, --help, -?                            give this help list
+    -i, --init                                initialize the server with a test archive
+    -w, --wipe                                delete every archive from the server

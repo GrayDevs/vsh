@@ -13,6 +13,12 @@ set -euo pipefail
 #set -x for verbose/debugging purpose
 #@see  https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 
+#### FUNCTION
+function :() {
+    echo browse $1
+    cat
+}
+
 #### PROCESS
 
 #Vérification du nombre de paramètre
@@ -36,7 +42,8 @@ case $1 in
         ;;
     "-b" | "--browse")
         #browse @server port nom_archive
-        nc $2 $3 <<< "browse $4"
+        #nc $2 $3 <<< "browse $4"
+        : $4 | nc $2 $3
         ;;
     "-d" | "--delete")
         #delete @server port nom_archive
