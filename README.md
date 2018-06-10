@@ -13,6 +13,9 @@ An archive consists of two parts:
 2) 'body', represents the contents of the different files.
 (@see test archive)
 
+#### Header Exemple
+![Header Exemple](vsh/IMG_Demo/exemple_header.PNG? "Header Exemple")
+
 ## Getting started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
@@ -33,8 +36,30 @@ git clone https://github.com/GrayDevs/vsh.git
 
 ## Demo
 
-Launching the server
-![launch](IMG_Demo/browse.PNG?raw=true "Title")
+### Server side
+#### Launching the server
+
+  ![launch](vsh/IMG_Demo/browse.PNG? "Launching the server")
+
+### Client side
+#### What are the different modes ?
+
+  ![Help](vsh/IMG_Demo/testing_help.PNG? "VSH Help")
+
+#### List and Extract
+  
+ ![List and Extract](vsh/IMG_Demo/list_extract.PNG? "List and Extract")
+ ![Extract success](vsh/IMG_Demo/success.PNG? "Extract success")
+ ![Check Extract](vsh/IMG_Demo/tree.PNG? "Check Extract")
+ 
+ #### Browse
+ 
+ ![Browse](vsh/IMG_Demo/browse_rm.PNG? "Browse")
+ 
+### Others
+#### Server log
+ ![Log](vsh/IMG_Demo/Log.PNG? "Log")
+
 
 ### Common Error
 
@@ -54,7 +79,8 @@ To solve this issue, you juste need to set the newline sequence to LF (and not C
 * **name** - *Initial work* - [nickname](github link)
 * **name2** - *Initial work* - [nickname2](github link)
 * **name3** - *archive generator* - [nickname3](github link)
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+See also the list of [contributors](https://github.com/GrayDevs/vsh/contributors) who participated in this project.
 
 ## License
 
