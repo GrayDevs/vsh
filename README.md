@@ -33,9 +33,8 @@ git clone https://github.com/GrayDevs/vsh.git
 
 ## Demo
 
-```
-Work in progress
-```
+Launching the server
+![launch](https://github.com/GrayDevs/vsh/tree/master/IMG_Demo/launch vsh-seveur.PNG)
 
 ### Common Error
 
