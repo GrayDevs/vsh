@@ -58,7 +58,7 @@ git clone https://github.com/GrayDevs/vsh.git
  
 ### Others
 #### Server log
- ![Log](IMG_Demo/Log.PNG? "Log")
+ ![Log](IMG_Demo/log.PNG? "Log")
 
 
 ### Common Error
