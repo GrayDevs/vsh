@@ -14,7 +14,7 @@ An archive consists of two parts:
 (@see test archive)
 
 #### Header Exemple
-![Header Exemple](vsh/IMG_Demo/exemple_header.PNG? "Header Exemple")
+![Header Exemple](IMG_Demo/exemple_header.PNG? "Header Exemple")
 
 ## Getting started
 
@@ -39,26 +39,26 @@ git clone https://github.com/GrayDevs/vsh.git
 ### Server side
 #### Launching the server
 
-  ![launch](vsh/IMG_Demo/browse.PNG? "Launching the server")
+  ![launch](IMG_Demo/browse.PNG? "Launching the server")
 
 ### Client side
 #### What are the different modes ?
 
-  ![Help](vsh/IMG_Demo/testing_help.PNG? "VSH Help")
+  ![Help](IMG_Demo/testing_help.PNG? "VSH Help")
 
 #### List and Extract
   
- ![List and Extract](vsh/IMG_Demo/list_extract.PNG? "List and Extract")
- ![Extract success](vsh/IMG_Demo/success.PNG? "Extract success")
- ![Check Extract](vsh/IMG_Demo/tree.PNG? "Check Extract")
+ ![List and Extract](IMG_Demo/list_extract.PNG? "List and Extract")
+ ![Extract success](IMG_Demo/success.PNG? "Extract success")
+ ![Check Extract](IMG_Demo/tree.PNG? "Check Extract")
  
  #### Browse
  
- ![Browse](vsh/IMG_Demo/browse_rm.PNG? "Browse")
+ ![Browse](IMG_Demo/browse_rm.PNG? "Browse")
  
 ### Others
 #### Server log
- ![Log](vsh/IMG_Demo/Log.PNG? "Log")
+ ![Log](IMG_Demo/Log.PNG? "Log")
 
 
 ### Common Error
