@@ -34,7 +34,7 @@ git clone https://github.com/GrayDevs/vsh.git
 ## Demo
 
 Launching the server
-![launch](https://github.com/GrayDevs/vsh/tree/master/IMG_Demo/launch%20vsh-seveur.PNG?raw=true "Title")
+![launch](IMG_Demo/browse.PNG?raw=true "Title")
 
 ### Common Error
 
