@@ -33,7 +33,7 @@ if [ $# -eq 1 ]; then
 		fi
 
 	else 
-		REPERTOIRE="$CURRENT/$test"
+		REPERTOIRE="$CURRENT/$1"
 	fi
 elif [ $# -eq 0 ]; then
 	REPERTOIRE="$CURRENT"
