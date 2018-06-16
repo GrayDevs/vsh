@@ -8,7 +8,7 @@ new shell command, named vsh, which works in different modes.
 ## What is an archive ?
 
 An archive is a file used to represent the tree structure of a directory and the contents of all files in this tree.
-An archive consists of two parts:
+An archive consists in two parts:
 1) 'header', describes the file tree.
 2) 'body', represents the contents of the different files.
 (@see test archive)
