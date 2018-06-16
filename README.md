@@ -57,11 +57,8 @@ git clone https://github.com/GrayDevs/vsh.git
  ![Browse](IMG_Demo/browse_rm.PNG? "Browse")
  
  #### Add / Generate / Init / Delete
- 
-### Others
-#### Server log
- ![Log](IMG_Demo/log.PNG? "Log")
 
+It Exist
 
 ### Common Error
 
