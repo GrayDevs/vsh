@@ -74,7 +74,7 @@ function test_rep() {
 					flag=1
 				fi
 			done
-
+			testrep=$(echo $testrep | sed "s%^$RACINE%%g")
 			if [ $flag -eq 1 ]; then
 				printf "cd: $testrep: Not a directory\n"
 			else 
@@ -82,6 +82,28 @@ function test_rep() {
 			fi
 			
 		fi
+	fi
+}
+
+# go_backward permet de gérer le retour en arrière via les ../
+# $1 	repertoire
+# $2	CURRENT
+function go_backward() {
+	local cible="$1"
+	local pere="$2"
+	
+	while [  "$(echo $cible | grep '^\.\.')" != "" ]; do
+		cible=$(echo $cible | sed 's/^\.\.\(.*\)$/\1/g' | sed 's/^\///g')
+		if [ "$pere" != "$RACINE" ]; then
+			pere=$(echo $pere | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
+		fi
+	done
+	
+	rep=$(echo $pere/$cible | sed 's/\/$//g') #on normalise le répertoire désiré
+	if [ "$rep" = "$RACINE" ]; then
+		CURRENT=$RACINE
+	else
+		test_rep $rep #appel de la fonction test_rep()
 	fi
 }
 
@@ -120,17 +142,16 @@ function change_directory() {
 			#si "cd ..[/<...>]"
 			if [ "$test" = ".." ]; then
 				#si "cd ..", on remonte dans l'arborescence
-				if [ "$repertoire" = ".." ]; then
+				if [ "$repertoire" = ".." ] || [ "$repertoire" = "../" ]; then
+					#si cd .. à la racine, on reste à la racine
 					if [ "$CURRENT" = "$RACINE" ]; then
 						CURRENT=$CURRENT
+					# sinon, on remonte dans l'arborescence (on supprime ce qu'il y a après le dernière /)
 					else
 						CURRENT=$(echo $CURRENT | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
 					fi
 				else #sinon ("cd ../<...>")
-					local cible=$(echo $repertoire | sed 's/^\.\.\/\(.*\)$/\1/g')
-					local pere=$(echo $CURRENT | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
-					local rep="$pere/$cible"
-					test_rep $rep #appel de la fonction test_rep()
+					go_backward $repertoire $CURRENT
 				fi
 			#sinon
 			else
