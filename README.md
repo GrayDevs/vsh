@@ -13,7 +13,7 @@ An archive consists of two parts:
 2) 'body', represents the contents of the different files.
 (@see test archive)
 
-#### Header Exemple
+#### - Header Exemple
 ![Header Exemple](IMG_Demo/exemple_header.PNG? "Header Exemple")
 
 ## Getting started
@@ -37,26 +37,26 @@ git clone https://github.com/GrayDevs/vsh.git
 ## Demo
 
 ### Server side
-#### Launching the server
+#### - Launching the server
 
   ![launch](IMG_Demo/browse.PNG? "Launching the server")
 
 ### Client side
-#### What are the different modes ?
+#### - What are the different modes ?
 
   ![Help](IMG_Demo/testing_help.PNG? "VSH Help")
 
-#### List and Extract
+#### - List and Extract
   
  ![List and Extract](IMG_Demo/list_extract.PNG? "List and Extract")
  ![Extract success](IMG_Demo/success.PNG? "Extract success")
  ![Check Extract](IMG_Demo/tree.PNG? "Check Extract")
  
- #### Browse
+ #### - Browse
  
  ![Browse](IMG_Demo/browse_rm.PNG? "Browse")
  
- #### Add / Generate / Init / Delete
+ #### - Add / Generate / Init / Delete
 
 **It Exist** (and it works actually) (approximately) 
 
