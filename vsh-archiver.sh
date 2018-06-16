@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Description: Script that generate an archive of a selected directory
-# Authors: /
-# Version: 1.0
+# Note : this file is a modified-fork, the original "recursive" function was created by z0rzie (https://github.com/z0rzi/)
 
 set -euo pipefail
 
@@ -88,7 +87,6 @@ outFile=$mainDir
 echo -n '' > /tmp/.body
 echo -n '' > /tmp/.header
 
-
 # Check if selected directory exist and is a directory
 if [ ! -d $1 ]; then
 	echo "The selected directory does not exist/is not a directory"
@@ -101,7 +99,6 @@ while [ "${outFile: -1}" = "/" ]; do
 done
 
 outFile=$(sed 's/^.*\/\([^/]*\)$/\1/g' <<< $outFile)
-
 origin=$(echo $mainDir | sed "s/^\(.*\)$outFile.*$/\1/")
 
 recursive $mainDir 1 $origin
@@ -115,8 +112,8 @@ cat /tmp/.body >> $outFile.arch
 trap nettoyage EXIT
 echo "log - archive $outFile.arch successfully generated"
 
-#Check process
-echo "Archive in the current directory:"
-ls | grep '.arch$'
+# Check process
+# echo "Archive in the current directory:"
+# ls | grep '.arch$'
 
 exit 0
