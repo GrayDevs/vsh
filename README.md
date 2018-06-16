@@ -58,7 +58,7 @@ git clone https://github.com/GrayDevs/vsh.git
  
  #### - Add / Generate / Init / Delete
 
-**It Exist** ... and **it works** ... (######sometimes) 
+**It Exist**
 
 ### Common Error
 
