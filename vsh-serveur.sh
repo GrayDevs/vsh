@@ -61,7 +61,7 @@ function interaction() {
 # $args     FICHIER_ARCHIVE
 function commande-browse() {
     ./vsh-browse.sh "$1"
-    echo "il se passe des choses "
+    printf "press enter "
     exit 0
 }
 
