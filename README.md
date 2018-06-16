@@ -76,9 +76,9 @@ To solve this issue, you juste need to set the newline sequence to LF (and not C
 * [Vim](https://github.com/vim/vim) - stubborn people text editor
 
 ## Authors
-* **name** - *Initial work* - [nickname](github link)
-* **name2** - *Initial work* - [nickname2](github link)
-* **name3** - *archive generator* - [nickname3](github link)
+* **APerrault** - *Initial work* - [Aurelien](https://github.com/aurelien45)
+* **APinon** - *Initial work* - [Gray](https://github.com/GrayDevs/)
+* **BZorzi** - *archive generator (recursive function)* - [z0rzi](https://github.com/z0rzi/)
 
 See also the list of [contributors](https://github.com/GrayDevs/vsh/contributors) who participated in this project.
 
