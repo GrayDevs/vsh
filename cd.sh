@@ -98,8 +98,11 @@ function change_directory() {
 		repertoire=$1 #cd <repertoire>
 
 		#si "cd /" (retour à la racine)
-		if [ "$repertoire" = "/" ] || [ "$repertoire" = "." ]; then 
+		if [ "$repertoire" = "/" ]; then 
 			CURRENT=$RACINE
+		#si "cd ." (on ne change rien)
+		elif [ "$repertoire" = "." ]; then
+			printf ""
 		else
 
 			#si l'argument commence par ./ , on échappe le ./, sinon on ne fait rien
