@@ -7,78 +7,80 @@
 
 set -euo pipefail
 
+##########################################
 #### FONCTION
 
 # La fonction liste_fichier() permet de lister les fichier d'une répertoire
 # $1	ARCHIVE
 # $2	REPERTOIRE
 function liste_fich() {
-	arch=$1
-	rep=$2
-	fichier="/tmp/rep.txt"
+	local arch=$1
+	local rep=$2
+	local fichier="/tmp/rep.txt"
 
-	touch /tmp/test.txt
-	ligne=$(grep -n '^directory '$rep'' $arch | head -1 | cut -d: -f1)
-	lignedel=$(grep -n '^@$' $arch | cut -d: -f1)
-	lignedel=$(echo $lignedel | sed 's/ /:/g')
-	n=$(grep -n '^'$rep'' $fichier | head -1 | cut -d: -f1)
-	fin=$(echo $lignedel | cut -d: -f$n)
-	nbligne=$(($fin-$ligne-1))
+	local ligne=$(grep -n '^directory '$rep'' $arch | head -1 | cut -d: -f1)
+	local lignedel=$(grep -n '^@$' $arch | cut -d: -f1)
+	local lignedel=$(echo $lignedel | sed 's/ /:/g')
+	local n=$(grep -n '^'$rep'' $fichier | head -1 | cut -d: -f1)
+	local fin=$(echo $lignedel | cut -d: -f$n)
+	local nbligne=$(($fin-$ligne-1))
 	echo $(cat $arch | head -$((fin-1)) | tail -$((nbligne))) > /tmp/test.txt
-
+	#cat $arch | head -$((fin-1)) | tail -$((nbligne)) | awk '{print $1}' > /tmp/test.txt
 }
 
 # La fonction testrep() test si un répertoire existe
 # $1	REPERTOIRE
 function test_rep() {
 
-	local flag=0
-	local testrep=$1
-
-	echo "debug 1 : $testrep"
+	local flag=0 #flag détermine si le répertoire est en chemin absolue ou non
+	local testrep=$(echo $1 | sed 's/\/$//g') # on échappe l'éventuelle / en fin de répertoire
 
 	# test si le répertoire demandé correspond à un des répertoires existant dans l'archive
 	# Utilisé en cas de chemin absolue
 	while read ligne; do
-		if [ "$ligne" = "$testrep" ];then
+		if [ "$ligne" = "$testrep" ]; then
 			flag=1
 		fi
 	done < /tmp/rep.txt
-	echo "debug 2 : flag - $flag"
 
-
-	if [ $flag -eq 1 ];then
+	# si chemin absolue et dossier existant
+	if [ $flag -eq 1 ]; then
 		CURRENT=$testrep
-	
-	elif [ $flag -eq 0 ];then
-		
+	# si chemin relatif (ou absolue mais dossier inexistant)
+	elif [ $flag -eq 0 ]; then
+		# meme test que précédemment
 		while read ligne; do
 			if [ "$CURRENT/$testrep" = "$ligne" ]; then
-				flag=1
+				flag=1 
 			fi
 		done < /tmp/rep.txt
 
+		#si le dossier est trouvé
 		if [ $flag -eq 1 ]; then
 			CURRENT="$CURRENT/$testrep"
-		elif [ $flag -eq 0 ];then
+		#sinon, dossier non trouvé
+		elif [ $flag -eq 0 ]; then
+
 			liste_fich $ARCHIVE $CURRENT
-			if [ -z  /tmp/test.txt ];then
-				echo "le répertoire est vide il n'y a pas de sous répertoire possible"
-				exit 1
-			fi
 
+#			if [ -z  /tmp/test.txt ]; then
+#				echo "le répertoire est vide, il n'y a pas de sous répertoire possible"
+#				exit 1
+#			fi
+
+			# Vérifie si le répertoire entré est un fichier
 			for word in $(cat /tmp/test.txt); do
-				if [ "$word" = "$testrep" ];then
-
-					while read ligne; do
-						if [ "$ligne" = "$CURRENT/$testrep" ];then
-							flag=1
-						fi
-					done < /tmp/rep.txt
-
+				if [ "$word" = "$testrep" ]; then
+					flag=1
 				fi
 			done
 
+			if [ $flag -eq 1 ]; then
+				printf "cd: $testrep: Not a directory\n"
+			else 
+				printf "cd: $testrep: No such file or directory\n"
+			fi
+			
 		fi
 	fi
 }
@@ -95,16 +97,15 @@ function change_directory() {
 	#si "cd <>" (1 argument)
 	elif [ $# -eq 1 ]; then
 
-		repertoire=$1 #cd <repertoire>
+		local repertoire=$1 #cd <repertoire>
 
-		#si "cd /" (retour à la racine)
-		if [ "$repertoire" = "/" ]; then 
+		#si "cd /" (retour à la racine) 
+		if [ "$repertoire" = "/" ]; then
 			CURRENT=$RACINE
 		#si "cd ." (on ne change rien)
 		elif [ "$repertoire" = "." ]; then
 			printf ""
 		else
-
 			#si l'argument commence par ./ , on échappe le ./, sinon on ne fait rien
 			repertoire=${repertoire#./*}
 
@@ -120,28 +121,28 @@ function change_directory() {
 			if [ "$test" = ".." ]; then
 				#si "cd ..", on remonte dans l'arborescence
 				if [ "$repertoire" = ".." ]; then
-					if [ "$CURRENT" = "$RACINE" ];then
+					if [ "$CURRENT" = "$RACINE" ]; then
 						CURRENT=$CURRENT
 					else
 						CURRENT=$(echo $CURRENT | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
 					fi
 				else #sinon ("cd ../<...>")
-					cible=$(echo $repertoire | sed 's/^\.\.\/\(.*\)$/\1/g')
-					pere=$(echo $CURRENT | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
-					rep="$pere/$cible"
+					local cible=$(echo $repertoire | sed 's/^\.\.\/\(.*\)$/\1/g')
+					local pere=$(echo $CURRENT | sed 's/\(.*\)\/[A-Z a-z 0-9]*$/\1/g')
+					local rep="$pere/$cible"
 					test_rep $rep #appel de la fonction test_rep()
 				fi
 			#sinon
 			else
-				echo "debug 0 : $repertoire, envoie dans testrep"
 				test_rep $repertoire #appel de la fonction test_rep()
 			fi
 		fi
 	else # Nombre d'argument > 1
-		echo "il y a trop d'arguments" 
+		echo "il y a trop d'arguments"
 	fi
 
 }
 
+##########################################
 ##### PROCESS
 change_directory $arg

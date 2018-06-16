@@ -19,9 +19,7 @@ export ARCHIVE="Archives/$1"
 export RACINE=$(sed -n '3p' $ARCHIVE | awk '{print $2}' | sed 's/\/$//g') #Exemple/Test
 export CURRENT=$RACINE
 
-# On récupère une liste des répertoire de l'archive qui nous sera utile pour les autres commandes
-grep '^directory' $ARCHIVE | sed 's/directory //g' > /tmp/rep.txt
-
+##########################################
 #### FONCTION
 
 # La fonction control() effectue les vérifications sur les parametres
@@ -40,13 +38,24 @@ function control() {
     fi
 }
 
+# La fonction generate génère tous les fichiers utiles au fonctionnement du browse
+function generate() {
+    # On récupère une liste des répertoire de l'archive qui nous sera utile pour les autres commandes
+    grep '^directory' $ARCHIVE | sed 's/directory //g' > /tmp/rep.txt
+    touch /tmp/test.txt
+}
+
 # La fonction nettoyage() permet de supprimer les fichiers temporaires utilisés par le mode browse
 function nettoyage() {
     rm /tmp/rep.txt
+    rm /tmp/test.txt
 }
 
+##########################################
 #### PROCESS
-trap nettoyage EXIT
+
+generate #génération des fichiers
+trap nettoyage EXIT #nettoyage
 is_running="TRUE"
 
 while [ "$is_running" == "TRUE" ]; do
@@ -87,7 +96,7 @@ while [ "$is_running" == "TRUE" ]; do
                 ./rm.sh $arg
                 ;; 
             "help")
-                printf "Commandes possibles : pwd ; ls <directory> ; cd <directory> ;\n cat <file_name> ; rm <file_name> ; exit\n"
+                printf "Commandes possibles : pwd ; ls <directory> ; cd <directory> ;\n cat <file_name> ; rm <file_name> ; clear ; exit\n"
                 ;;
             "exit")
                 is_running="FALSE"

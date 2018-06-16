@@ -2,12 +2,29 @@
 
 # Description: affiche le contenu du répertoire 
 # $1    REPERTOIRE (dont le contenu est à lister)
+# Ce script utilise les fichiers suivants :
+# /tmp/rep.txt
+# /tmp/liste.txt
+# /tmp/listerep.txt
 
 set -euo pipefail
 
-# On récupère une liste des répertoire de l'archive qui nous sera utile pour les autres commandes
-grep '^directory' $ARCHIVE | sed 's/directory //g' > rep.txt
-touch liste.txt
+# Création des fichiers nécessaire au script
+touch /tmp/liste.txt
+touch /tmp/listerep.txt
+
+##########################################
+#### FUNCTION
+
+function nettoyage() {
+	rm /tmp/liste.txt
+	rm /tmp/listerep.txt
+}
+
+##########################################
+#### PROCESS
+
+trap nettoyage EXIT
 
 if [ $# -eq 1 ]; then
 	# On récupère le répertoire passé en argument
@@ -49,7 +66,7 @@ lignedel=$(grep -n '^@$' $ARCHIVE | cut -d: -f1)
 lignedel=$(echo $lignedel | sed 's/ /:/g')
 
 # On récupère la position du répertoire dans la liste de tout les REPERTOIRE
-n=$(grep -n '^'$REPERTOIRE'' rep.txt | head -1 | cut -d: -f1)
+n=$(grep -n '^'$REPERTOIRE'' /tmp/rep.txt | head -1 | cut -d: -f1)
 # On déduit la dernière ligne en récupérent le numéro de la ligne du @ correspondant au répertoire à lister
 fin=$(echo $lignedel | cut -d: -f$n)
 
@@ -82,7 +99,5 @@ else
 
 	cat /tmp/listerep.txt
 
-	rm /tmp/liste.txt
-	rm /tmp/listerep.txt
 fi
 exit 0

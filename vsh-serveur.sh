@@ -31,8 +31,8 @@ function nettoyage() { rm -f "$FIFO"; }
 # interaction ci-dessous
 function accept-loop() {
     while true; do #boucle infinie
-        printf "log - Connexion aux serveur\n" >> vsh.log
-        interaction < "$FIFO" | netcat -q 0 -l -p  "$PORT" > "$FIFO" #listen and port
+        interaction < "$FIFO" | netcat -v -q 0 -l -p "$PORT" >> vsh.log 2>&1 > "$FIFO" #listen and port, verbose version used for debug purpose
+        #interaction < "$FIFO" | netcat -q 0 -l -p  "$PORT" > "$FIFO" #non verbose, stable version
     done
 }
 
@@ -61,6 +61,7 @@ function interaction() {
 # $args     FICHIER_ARCHIVE
 function commande-browse() {
     ./vsh-browse.sh "$1"
+    echo "il se passe des choses "
     exit 0
 }
 
