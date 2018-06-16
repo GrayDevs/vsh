@@ -13,5 +13,4 @@ Usage: vsh [OPTION...]([SERVER][PORT][ARCHIVE])
     -d, --delete arch_name                    delete the selected .arch file from the server
     -g, --generate directory                  generate an arch. of the selected directory
     -h, --help, -?                            give this help list
-    -i, --init                                initialize the server with a test archive
-    -w, --wipe                                delete every archive from the server
+    -i, --init arch_name                      initialize the server with a test archive

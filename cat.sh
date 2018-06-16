@@ -9,8 +9,6 @@ set -euo pipefail
 
 fichier=$1 
 test=$(echo $1 | awk -F/ '{print $1}')
-grep '^directory' $ARCHIVE | sed 's/directory //g' > /tmp/rep.txt
-
 
 if [ "$test" = "." ];then
 	cible=$(echo $fichier | sed 's/^.\/\(.*\)$/\1/g')

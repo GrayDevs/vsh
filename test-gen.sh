@@ -1,22 +1,16 @@
 #!/bin/bash
 
 # Description: Script that generate a test <...>.arch file
-# Authors: /
-# Version: 1.0
-
-# Parameters:
-file_name=$1
 
 # Parameters checkin'
 if [ $# -gt 1 ]; then
 	echo "USAGE='$0 <name of the .arch file>'"
 	echo "no args will generate a 'test.arch' file in your current directory"
 	exit 1
-fi
-
-# /
-if [ $# -eq 0 ]; then
-	  file_name='test'
+elif [ $# -eq 0 ]; then
+	file_name='test'
+elif [ $# -eq 1 ]; then
+	file_name="$1"
 fi
 
 # File content
@@ -27,13 +21,13 @@ file_content="
 \tls [OPTION]... [FILE]...\n\nDESCRIPTION\n
 \tList information about the FILEs.\nDESCRIPTION\n
 \tman formats and displays the on-line manual pages.\nNAME\n
-\tcat - concatenate files and print on the standard output\n\nSYNOPSIS
+\tcat - concatenate files and print on the standard output\n\nSYNOPSIS\n
 \tcat [OPTION] [FILE]...\n\nDESCRIPTION\n
 \tConcatenate FILE(s), or standard input, to standard out-\n
 \tput.
 " 			
 
-echo -e $file_content >> $file_name.arch
+echo -e $file_content >> Archives/$file_name.arch
+echo -e "log - $file_name.arch successfully generated (test-gen)" >> vsh.log
 
-echo -e "log - $file_name.arch successfully generated"
 exit 0

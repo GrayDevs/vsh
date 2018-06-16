@@ -12,9 +12,10 @@ if [ $# -ne 1 ]; then
     exit -1
 fi
 
-# Constante
+# Variable
 PORT="$1"
-ARCHIVE="./Archives/"
+ARCHIVE="./Archives"
+#color
 RED='\033[1;31m'
 YELLOW='\033[0;36m'
 GREY='\033[1;30m'
@@ -30,24 +31,25 @@ function nettoyage() { rm -f "$FIFO"; }
 # interaction ci-dessous
 function accept-loop() {
     while true; do #boucle infinie
-            printf "log - Connexion aux serveur\n" >> vsh.log
-    	   interaction < "$FIFO" | netcat -q 5 -l -p  "$PORT" > "$FIFO" #listen, keep and port            
+        printf "log - Connexion aux serveur\n" >> vsh.log
+        interaction < "$FIFO" | netcat -q 0 -l -p  "$PORT" > "$FIFO" #listen and port
     done
 }
 
 # La fonction interaction lit les commandes du client sur l'entrée standard
 # et envoie les réponses sur sa sortie standard.
 function interaction() {
-
     local cmd args #déclaration de variables locales
-
+    
     while true; do #boucle infinie
-	    read cmd args || exit -1 #demande à l'utilisateur de saisir les valeurs pour cmd et args
-	    funct="commande-$cmd"
-	    if [ "$(type -t $funct)" = "function" ]; then #si la funct existe et est une fonction
-	        $funct $args #on l'exécute
+	
+        read cmd args || exit -1 #demande à l'utilisateur de saisir les valeurs pour cmd et args
+
+        funct="commande-$cmd"
+        if [ "$(type -t $funct)" = "function" ]; then #si la funct existe et est une fonction
+            $funct $args #on l'exécute
 	    else
-	       commande-non-comprise $funct $args #renvoie le message d'erreur
+	        commande-non-comprise $funct $args #renvoie le message d'erreur
 	    fi
     done
 }
@@ -59,10 +61,10 @@ function interaction() {
 # $args     FICHIER_ARCHIVE
 function commande-browse() {
     ./vsh-browse.sh "$1"
-    exit
+    exit 0
 }
 
-#
+# Liste les différentes archives présentes sur le serveur
 function commande-list() {
     printf "${GREY}#Liste des archives présentes sur le serveur :${NC}\n"
     if [ "ls $ARCHIVE" == "" ]; then
@@ -74,38 +76,49 @@ function commande-list() {
         ls -l $ARCHIVE | grep '.arch$' | awk '{print $9 "\t" $6"-"$7"-"$8 "\t" $5}' # | sort -df
         #stat --printf="%n\t%y\t%s\n" $ARCHIVE | sort -t $'\t' -k 2
     fi
-    exit
+    exit 0
 }
 
-#
+# $args     FICHIER_ARCHIVE
 function commande-extract() {
     echo "Vous souhaitez extraire l'archive $args" #existance de l'archive à vérifier
     ./vsh-extract.sh $args
-    exit
+    exit 0
 }
 
 # Autres fonctions
 function commande-add() {
     printf "Ajout de l'archive $args au serveur\n"
-    exit
+    local nom_archive=$(echo $args | sed 's/\..*$//g')
+    nc -q 0 -lp 60000 > $ARCHIVE/$nom_archive.arch
+    echo "$nom_archive successfully transfered - press enter"
+    exit 0
 }
 
 function commande-delete() {
     printf "Vous souhaitez supprimer l'archive $args\n" #existance de l'archive à vérifier
     printf "${RED}ATTENTION${NC}: Cette action est irréversible\n"
-    #rm -f $args
-    exit
+    printf "Voulez-vous continuer (y/n) ? "
+    local answ; read answ
+    
+    if [ "$answ" == "y" ]; then
+        rm -f $ARCHIVE/$args
+        printf "$args successfully removed - "
+    fi
+    printf "press enter"
+    exit 0
 }
 
 function commande-init() {
-    printf "Initialisation du serveur avec une archive test"
-    exit
+    printf "Initialisation du serveur avec une archive test\n"
+    ./test-gen.sh $args
+    exit 0
 }
 
 function commande-non-comprise() {
    echo "Le serveur ne peut pas interpréter cette commande"
    echo "Try 'vsh --help' for more information."
-   exit
+   exit 0
 }
 
 #### PROCESS
@@ -123,4 +136,5 @@ trap nettoyage EXIT
 
 # On accepte et traite les connexions
 accept-loop
+
 exit 0

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Description :
+# Description : Script permettant le changement de répertoire (navigation dans une archive)
 # Ce script utilise les fichiers suivants :
 # /tmp/rep.txt
 # /tmp/test.txt
@@ -12,8 +12,7 @@ set -euo pipefail
 # La fonction liste_fichier() permet de lister les fichier d'une répertoire
 # $1	ARCHIVE
 # $2	REPERTOIRE
-function listefich() 
-{
+function liste_fich() {
 	arch=$1
 	rep=$2
 	fichier="/tmp/rep.txt"
@@ -31,16 +30,22 @@ function listefich()
 
 # La fonction testrep() test si un répertoire existe
 # $1	REPERTOIRE
-function test_rep()
-{
+function test_rep() {
 
-	flag=0
-	testrep=$1
+	local flag=0
+	local testrep=$1
+
+	echo "debug 1 : $testrep"
+
+	# test si le répertoire demandé correspond à un des répertoires existant dans l'archive
+	# Utilisé en cas de chemin absolue
 	while read ligne; do
 		if [ "$ligne" = "$testrep" ];then
 			flag=1
 		fi
 	done < /tmp/rep.txt
+	echo "debug 2 : flag - $flag"
+
 
 	if [ $flag -eq 1 ];then
 		CURRENT=$testrep
@@ -52,10 +57,11 @@ function test_rep()
 				flag=1
 			fi
 		done < /tmp/rep.txt
+
 		if [ $flag -eq 1 ]; then
 			CURRENT="$CURRENT/$testrep"
 		elif [ $flag -eq 0 ];then
-			listefich $ARCHIVE $CURRENT
+			liste_fich $ARCHIVE $CURRENT
 			if [ -z  /tmp/test.txt ];then
 				echo "le répertoire est vide il n'y a pas de sous répertoire possible"
 				exit 1
@@ -72,6 +78,7 @@ function test_rep()
 
 				fi
 			done
+
 		fi
 	fi
 }
@@ -79,13 +86,8 @@ function test_rep()
 # La fonction change_directory effectue le changement de répertoire
 # $1	REPERTOIRE
 function change_directory() {
-	# On récupère une liste des répertoire de l'archive qui nous sera utile pour les autres commandes
-	grep '^directory' $ARCHIVE | sed 's/directory //g' > /tmp/rep.txt
-
-	#grep '^directory' $ARCHIVE | awk '{print $2}' > /tmp/rep.txt
 
 	# Actions selon le nombre d'arguments
-
 	# si "cd" (retour à la racine)
 	if [ $# -eq 0 ]; then 
 		CURRENT=$RACINE
@@ -96,9 +98,18 @@ function change_directory() {
 		repertoire=$1 #cd <repertoire>
 
 		#si "cd /" (retour à la racine)
-		if [ "$repertoire" = "/" ]; then 
+		if [ "$repertoire" = "/" ] || [ "$repertoire" = "." ]; then 
 			CURRENT=$RACINE
 		else
+
+			#si l'argument commence par ./ , on échappe le ./, sinon on ne fait rien
+			repertoire=${repertoire#./*}
+
+			#si l'argument commence par /, on passe en chemin absolue
+			if [ "${repertoire:0:1}" = "/" ]; then
+				repertoire=$RACINE$repertoire
+			fi
+
 			# récupère le nom du répertoire ou le champs précédant un éventuelle / 
 			test=$(echo $repertoire | awk -F/ '{print $1}')
 
@@ -117,25 +128,16 @@ function change_directory() {
 					rep="$pere/$cible"
 					test_rep $rep #appel de la fonction test_rep()
 				fi
-			#si "cd .[/<...>]"
-			elif [ "$test" = "." ]; then
-				#si "cd ./<...>"
-				if [ "$repertoire" != "." ]; then
-					cible=$(echo $repertoire | sed 's/^.\/\(.*\)$/\1/g')
-					rep="$CURRENT/$cible"
-					test_rep $rep
-				fi
 			#sinon
 			else
-				test_rep $repertoire
+				echo "debug 0 : $repertoire, envoie dans testrep"
+				test_rep $repertoire #appel de la fonction test_rep()
 			fi
 		fi
 	else # Nombre d'argument > 1
 		echo "il y a trop d'arguments" 
 	fi
 
-	rm /tmp/rep.txt #nettoyage
-	echo "CURRENT : $CURRENT"
 }
 
 ##### PROCESS
