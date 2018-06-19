@@ -155,7 +155,7 @@ function change_directory() {
 				fi
 			#sinon
 			else
-				test_rep $repertoire #appel de la fonction test_rep()
+				test_rep $(echo $repertoire | sed 's/\/$//g') #appel de la fonction test_rep()
 			fi
 		fi
 	else # Nombre d'argument > 1
