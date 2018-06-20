@@ -163,11 +163,11 @@ if [ $# -eq 0 ]; then
 elif [ $# -eq 1 ]; then
 	# On récupère le répertoire passé en argument
 	repertoire=$1
-	#repertoire=$(echo $1 | sed 's/\/$//g') # supprime l'éventuelle / enfin de ligne
+
 	#si "ls /" (retour à la racine) 
 	if [ "$repertoire" = "/" ]; then
 			repertoire="$RACINE"
-	#si "cd ." (on ne change rien)
+	#si "ls ." (on ne change rien)
 	elif [ "$repertoire" = "." ]; then
 		repertoire="$CURRENT"	
 	else
@@ -181,7 +181,7 @@ elif [ $# -eq 1 ]; then
 		elif [ "$test" = ".." ]; then # si ls .. ou ls ../...
 			go_backward $repertoire $CURRENT
 		else 
-			repertoire="$CURRENT/$1"
+			repertoire="$CURRENT/$repertoire"
 		fi
 	fi
 else 
