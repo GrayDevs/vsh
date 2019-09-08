@@ -39,7 +39,7 @@ git clone https://github.com/GrayDevs/vsh.git
 ### Server side
 #### - Launching the server
 
-  ![launch](IMG_Demo/browse.PNG? "Launching the server")
+  ![launch](IMG_Demo/launch_vsh-seveur.PNG? "Launching the server")
 
 ### Client side
 #### - What are the different modes ?
